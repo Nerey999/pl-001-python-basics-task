@@ -14,6 +14,7 @@ uv sync --locked
 
 echo "==> Ruff fix (imports, lint)"
 uv run ruff check --fix src
+uv run ruff format src
 
 echo "==> Pytest"
 uv run pytest src/tests
