@@ -51,7 +51,7 @@ def decode_timestamp_ms(snowflake_id: int, epoch_ms: int = EPOCH_MS_DEFAULT) -> 
         The absolute Unix time in milliseconds at which the identifier was
         generated.
     """
-    return epoch_ms + snowflake_id >> (NODE_ID_BITS + SEQUENCE_ID_BITS)
+    return epoch_ms + (snowflake_id >> (NODE_ID_BITS + SEQUENCE_ID_BITS))
 
 
 def decode_node_id(snowflake_id: int) -> int:
@@ -109,10 +109,10 @@ def generate_snowflake_id(
         cases an explanatory message is printed to stdout first.
     """
     if not (0 <= node_id <= NODE_ID_MAX):
-        print(f"node_id must be in [0, {NODE_ID_MAX}]")
+        print(f"node_id must be in [0, {NODE_ID_MAX}], received {node_id}")
         return None
     if not (0 <= sequence_id <= SEQUENCE_ID_MAX):
-        print(f"sequence_id must be in [0, {SEQUENCE_ID_MAX}]")
+        print(f"sequence_id must be in [0, {SEQUENCE_ID_MAX}], received {sequence_id}")
         return None
 
     elapsed = read_current_millis(epoch_ms)
