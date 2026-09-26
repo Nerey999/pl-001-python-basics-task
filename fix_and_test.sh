@@ -17,6 +17,6 @@ uv run ruff check --fix src
 uv run ruff format src
 
 echo "==> Pytest"
-uv run pytest src/tests
+uv run pytest src/part1/tests
 
 echo "All done."
