@@ -77,6 +77,7 @@ def create_product(
     }
     new_record = dict_to_product(dict_record)
     storage.append(new_record)
+    storage.sort()
     return new_record[PRODUCT_ID_INDEX]
 
 
@@ -135,6 +136,7 @@ def update_product(
     new_record = dict_to_product(dict_record)
     storage.remove(record)
     storage.append(new_record)
+    storage.sort()
 
     return new_record
 
