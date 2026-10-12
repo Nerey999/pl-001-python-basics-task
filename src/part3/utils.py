@@ -80,22 +80,26 @@ def get_storage_str_representation(storage: list[Product]) -> str:
     """
 
     width = {
-        header : max([len(header), *(len(str(product[inx])) for product in storage)])
+        header: max([len(header), *(len(str(product[inx])) for product in storage)])
         for inx, header in enumerate(TABLE_HEADERS)
     }
 
     def _row(cells: list[str]) -> str:
-        return "".join(f"| {cell:<{width[header]}} " for header, cell in zip(TABLE_HEADERS, cells)) + "|"
-
-    return "\n".join([
-        _row(list(TABLE_HEADERS)),
-        
-        "".join(f"|{"-"*(width[header]+2)}"  
-            for header in TABLE_HEADERS) + "|",
-        
-        *(
-            _row(str(product[inx]) 
-                for inx in range(len(TABLE_HEADERS)))
-                    for product in storage
+        return (
+            "".join(
+                f"| {cell:<{width[header]}} "
+                for header, cell in zip(TABLE_HEADERS, cells)
+            )
+            + "|"
         )
-    ])
+
+    return "\n".join(
+        [
+            _row(list(TABLE_HEADERS)),
+            "".join(f"|{'-' * (width[header] + 2)}" for header in TABLE_HEADERS) + "|",
+            *(
+                _row([str(product[inx]) for inx in range(len(TABLE_HEADERS))])
+                for product in storage
+            ),
+        ]
+    )

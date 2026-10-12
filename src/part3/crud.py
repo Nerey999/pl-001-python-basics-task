@@ -29,7 +29,7 @@ from .storage import (
     QUANTITY_INDEX,
     Product,
 )
-from .utils import normalize_price, normalize_product_name  # noqa: F401
+from .utils import normalize_price, normalize_product_name
 
 
 def generate_product_id(storage: list[Product]) -> int:
@@ -49,8 +49,10 @@ def generate_product_id(storage: list[Product]) -> int:
         else max(storage, key=lambda x: x[PRODUCT_ID_INDEX])[PRODUCT_ID_INDEX] + 1
     )
 
+
 def dict_to_product(record: dict[int, Any]) -> Product:
     return tuple(x[1] for x in sorted(record.items()))
+
 
 def create_product(
     storage: list[Product], fields: tuple[str, Decimal, int]
@@ -73,14 +75,14 @@ def create_product(
         is left unchanged and an explanatory message is printed.
     """
     normalized_name = normalize_product_name(fields[0])
-    
+
     if normalized_name in [x[NAME_INDEX] for x in storage]:
         print(f"product name '{normalized_name}' is already taken")
         return None
     if not normalized_name:
         print("product name must not be blank")
         return None
-    
+
     dict_record = {
         PRODUCT_ID_INDEX: generate_product_id(storage),
         NAME_INDEX: normalized_name,
@@ -88,7 +90,7 @@ def create_product(
         QUANTITY_INDEX: fields[2],
     }
     new_record = dict_to_product(dict_record)
-    
+
     storage.append(new_record)
     storage.sort()
     return new_record[PRODUCT_ID_INDEX]
@@ -148,10 +150,12 @@ def update_product(
     if not record:
         return None
 
-    if normalized_name in [x[NAME_INDEX] for x in storage]:
+    if normalized_name in [
+        x[NAME_INDEX] for x in storage if x[PRODUCT_ID_INDEX] != product_id
+    ]:
         print(f"product name '{normalized_name}' is already taken")
         return None
-    
+
     dict_record = {
         PRODUCT_ID_INDEX: record[PRODUCT_ID_INDEX],
         NAME_INDEX: normalized_name,
@@ -185,4 +189,3 @@ def delete_product(storage: list[Product], product_id: int) -> int | None:
 
     storage.remove(record)
     return product_id
-
